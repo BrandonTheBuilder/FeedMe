@@ -1,0 +1,7 @@
+env
+.komodotools
+*.komodoproject
+build
+dist
+*.pyc
+*.spec

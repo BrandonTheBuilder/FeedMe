@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<project name="FeedMe" default="start-server" basedir=".">
+    <property name="name" value="FeedMe"/>
+    <property name="root" location="." />
+    <property name="virtual_env" location="env/Scripts" />
+    <property name="and" value="&amp;&amp;" />
+
+    <property name="main" location="src/main.py" />
+    <property name="activate" location="env\Scripts\activate" />
+
+    <property name="proxy" value="http://170.2.59.25:8080" />
+
+    <target name="setup">
+        <exec executable="cmd">
+            <env key="HTTPS_PROXY" value="${proxy}" />
+            <arg line='/C "python requirements\get-pip.py"' />
+        </exec>
+        <exec executable="cmd">
+            <env key="HTTPS_PROXY" value="${proxy}" />
+            <arg line='/C "pip install virtualenv"' />
+        </exec>
+        <mkdir dir="env" />
+        <exec executable="cmd">
+            <arg line='/C "virtualenv env"' />
+        </exec>
+        <exec executable="cmd">
+            <arg line="/C python requirements/updateEnvironment.py" />
+        </exec>
+        <exec executable="cmd">
+            <env key="HTTPS_PROXY" value="${proxy}" />
+            <arg line='/C "${activate} ${and} pip install -r requirements.txt"'/>
+        </exec>
+        <exec executable="cmd">
+            <arg line='/C "${activate} ${and} easy_install requirements\pywin32-219.win-amd64-py2.7.exe"' />
+        </exec>
+        <mkdir dir="dist\${name}\data" />
+    </target>
+
+    <target name="deploy">
+        <exec executable="cmd">
+            <arg line='/C "${activate} ${and} pyinstaller -c --name=${name} ${main}"' />
+        </exec>
+    </target>
+
+    <target name="nosetests">
+        <exec executable="cmd">
+            <arg line='/C "${activate} ${and} nosetests"' />
+        </exec>
+    </target>
+</project>
