@@ -34,7 +34,6 @@
         <exec executable="cmd">
             <arg line='/C "${activate} ${and} easy_install requirements\pywin32-219.win-amd64-py2.7.exe"' />
         </exec>
-        <mkdir dir="dist\${name}\data" />
     </target>
 
     <target name="deploy">

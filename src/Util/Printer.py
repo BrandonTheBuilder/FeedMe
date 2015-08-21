@@ -16,6 +16,9 @@ class Printer():
         else:
             print Fore.MAGENTA + text
             
+    def printStatus(self, text):
+        print Fore.GREEN + text
+        
     def printEntry(self, entry):
         print '\n'
         try:
