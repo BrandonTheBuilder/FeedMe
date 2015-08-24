@@ -1,7 +1,8 @@
 
 def Det(matrix):
+    isMatrix(matrix)
     if len(matrix[0]) != len(matrix):
-        raise ValueError("The determinant is undefined for a non-square matrix")
+        raise ArithmeticError("The determinant is undefined for a non-square matrix")
     #Check if matrix is a 2 x 2
     if len(matrix[0]) == 2:
         return (matrix[0][0]*matrix[1][1] -
@@ -20,8 +21,9 @@ def Det(matrix):
         return determinant
     
 def FirstSubMatrix(i,j,matrix):
+    isMatrix(matrix)
     if len(matrix) == 2:
-        return Det(matrix)
+        return matrix
     #i,j starts at 0,0 like list indices not 1,1
     indices = [ind for ind in range(0,len(matrix))]
     indices.remove(j)
@@ -36,6 +38,9 @@ def FirstSubMatrix(i,j,matrix):
     return newMatrix
 
 def Cofactor(matrix):
+    isMatrix(matrix)
+    if len(matrix) == 2:
+        return [[matrix[1][1], -matrix[1][0]],[-matrix[0][1],matrix[0][0]]]
     cofactor = []
     for i in range(0,len(matrix)):
         row = []
@@ -48,6 +53,7 @@ def Cofactor(matrix):
     return cofactor
 
 def Transpose(matrix):
+    isMatrix(matrix)
     transpose = []
     for i in range(0, len(matrix[0])):
         row = []
@@ -57,10 +63,11 @@ def Transpose(matrix):
     return transpose
         
 def Inv(matrix):
+    isMatrix(matrix)
     cofactor = Cofactor(matrix)
     det = Det(matrix)
     if det == 0:
-        raise ValueError('A matrix with a determinant of 0 does not have an inverse')
+        raise ArithmeticError('A matrix with a determinant of 0 does not have an inverse')
     inverse = []
     for row in Transpose(cofactor):
         newRow = []
@@ -70,10 +77,12 @@ def Inv(matrix):
     return inverse
 
 def Multiply(A,B):
+    isMatrix(A)
+    isMatrix(B)
     bTrans = Transpose(B)
     if len(A[0]) != len(bTrans[0]):
-        raise ValueError(
-'Cannot multiply matrices where the number of colums in A do not equal the number of Rows in B')
+        raise ArithmeticError(
+'Cannot multiply matrices where the number of colums in A does not equal the number of Rows in B')
     C = []
     for row in A:
         newRow = []
@@ -84,7 +93,18 @@ def Multiply(A,B):
             newRow.append(value)
         C.append(newRow)
     return C
-    
+
+def isMatrix(matrix):
+    try:
+        if len(matrix) > 1 or len(matrix[0]) > 1:
+            return True
+        else:
+            raise ValueError('Matrix must be at least 2x2')
+        
+    except ValueError as error:
+        raise error
+    except TypeError:
+        raise TypeError('A matrix is input in the form of a list of lists [[a,b],[c,d]]')
             
                 
                 

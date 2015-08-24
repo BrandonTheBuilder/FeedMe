@@ -3,13 +3,38 @@ import Util.MatrixMath as MM
 from unittest import skip
 
 class testMatrixMath(unittest.TestCase):
-    
-    def test_noDeterminant(self):
+            
+    def test_exceptionHandling(self):
         try:
             MM.Det([[0,1],[1,0],[0,1]])
+            notAfunction.nothing()
         except Exception as ex:
-            self.assertEquals(True, isinstance(ex, ValueError))
+            self.assertEquals(True, isinstance(ex, ArithmeticError))
+        try:
+            m = [[1,2,3,4],[4,5,6,7],[8,7,6,5],[4,3,2,1]]
+            self.assertEquals(0, MM.Det(m))
+            MM.Inv(m)
+            notAfunction.nothing()
+        except Exception as ex:
+            self.assertEquals(True, isinstance(ex, ArithmeticError))
+        try:
+            A = [[1,3,1],[1,3,4]]
+            B = [[1,0],[0,1]]
+            MM.Multiply(A,B)
+            notAfunction.nothing()
+        except Exception as ex:
+            self.assertEquals(True, isinstance(ex, ArithmeticError))
+        try:
+            MM.isMatrix(7)
+            notAfunction.nothing()
+        except Exception as ex:
+            self.assertEquals(True, isinstance(ex, TypeError))
+        try:
+            MM.isMatrix([[1]])
+        except Exception as ex:
+            self.assertEquals(True, isinstance(ex, ValueError))   
             
+        
     def test_FirstSubmatrix(self):
         matrix = [[1,2,3],[4,5,6],[7,8,9]]
         i=1
@@ -22,6 +47,11 @@ class testMatrixMath(unittest.TestCase):
         matrix = [[3,4],[6,7]]
         det = -3
         self.assertEquals(det, MM.Det(matrix))
+        
+    def test_twoByTwoInverse(self):
+        matrix = [[3,4],[6,7]]
+        inverse = [[-7/3,4/3],[2,-1]]
+        self.assertEquals(inverse, MM.Inv(matrix))
         
        
     def test_fourByFour(self):
